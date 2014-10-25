@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
-    <title>Hello!</title>
+    <title>Gentoo Haskell overlay status</title>
     <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
