@@ -7,6 +7,6 @@
     <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
-    <apply template="packages"/>
+    <apply-content />
   </body>
 </html>

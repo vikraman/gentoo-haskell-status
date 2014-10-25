@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 module Site where
 
@@ -22,7 +23,7 @@ import Package
 handleIndex :: AppHandler ()
 handleIndex = do hackage <- query QueryHackage
                  packages <- query QueryPackages
-                 renderWithSplices "base" (packageSplices hackage packages)
+                 renderWithSplices "home" (packageSplices hackage packages)
 
 packageSplices :: Hackage -> [Package] -> Splices (SnapletISplice App)
 packageSplices hackage packages = "packages" ## renderPackages hackage packages
@@ -41,6 +42,15 @@ packageSplice hackage p@(Package pn pv) =
                             then "#f9bdbb"
                             else "#d0f8ce"
 
+handleOutdatedpackages :: AppHandler ()
+handleOutdatedpackages = do
+  hackage <- query QueryHackage
+  packages <- query QueryPackages
+  renderWithSplices "outdated" (packageSplices
+                                hackage
+                                (filter (\p -> hackageVersion hackage p > packageVersion p) packages)
+                               )
+
 handleUpdateHackage :: AppHandler ()
 handleUpdateHackage =
   do a <- getAcidState
@@ -56,6 +66,7 @@ routes :: [ (ByteString, AppHandler ()) ]
 routes = [ ("/",               handleIndex)
          , ("/updateHackage",  handleUpdateHackage)
          , ("/updatePackages", handleUpdatePackages)
+         , ("/outdated",       handleOutdatedpackages)
          , ("/static",         serveDirectory "static")
          ]
 
