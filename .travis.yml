@@ -1,0 +1,9 @@
+language: haskell
+deploy:
+  provider: heroku
+  api_key:
+    secure: cTZAOxSH6np+js/osdp49JK6vNILK0UunnxY0wYwrz8NqwW6ZIddhj7BrVN9u5VzcdU2JyGC5DGq+k+IdEzy8LUy6jy2fCRFK1sAVMQBbQYjdMs6/Jh05j58b3jQ5BZ0oI2J/PB6UGS52YaH5ZUdKCWe4Z2zbGcYHpopVUYbQPU=
+  strategy: git
+  app: gentoo-haskell
+  on:
+    repo: vikraman/gentoo-haskell-status
