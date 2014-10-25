@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <title>Gentoo Haskell overlay status</title>
     <link rel="stylesheet" href="/static/main.css">
+    <script src="/static/main.js"></script>
   </head>
   <body>
     <apply-content />

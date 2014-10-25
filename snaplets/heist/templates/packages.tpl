@@ -2,8 +2,14 @@
   <thead>
     <tr>
       <th>Package</th>
-      <th>Gentoo version</th>
-      <th>Hackage version</th>
+      <th>
+        Gentoo version
+        <a href="#" onClick="updatePackages()">Update</a>
+      </th>
+      <th>
+        Hackage version
+        <a href="#" onClick="updateHackage()">Update</a>
+      </th>
     </tr>
   </thead>
   <tbody>
