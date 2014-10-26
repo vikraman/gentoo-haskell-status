@@ -4,6 +4,7 @@
 module Package where
 
 import           Control.Applicative
+import qualified Control.Exception       as E
 import           Control.Monad
 import qualified Data.Attoparsec.Text    as P
 import qualified Data.List               as L
@@ -13,6 +14,7 @@ import qualified Distribution.Hackage.DB as H
 import qualified Distribution.Version    as V
 import           Github.GitData.Trees    (GitTree (..), nestedTree,
                                           treeGitTrees)
+import           Network.HTTP.Conduit
 
 type Path = T.Text
 type Tree = [T.Text]
@@ -108,3 +110,18 @@ readPackages = do tree <- getTree
                   let notLivePackages = filter notLive packages
                       latestPackages = latest notLivePackages
                   return latestPackages
+
+doUpdatePackages :: IO ()
+doUpdatePackages = do initReq <- parseUrl "http://gentoo-haskell.herokuapp.com/updatePackages"
+                      let req = initReq { method = "POST" }
+                      E.catch (void $ withManager $ httpLbs req)
+                              ignoreException
+
+doUpdateHackage :: IO ()
+doUpdateHackage = do initReq <- parseUrl "http://gentoo-haskell.herokuapp.com/updateHackage"
+                     let req = initReq { method = "POST" }
+                     E.catch (void $ withManager $ httpLbs req)
+                             ignoreException
+
+ignoreException :: HttpException -> IO ()
+ignoreException e = return ()
