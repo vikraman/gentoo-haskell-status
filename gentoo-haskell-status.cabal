@@ -37,7 +37,7 @@ Executable gentoo-haskell-status
     attoparsec                >= 0.12    && < 0.13,
     github                    >= 0.11    && < 0.12,
     hackage-db                >= 1.8     && < 1.9,
-    Cabal                     >= 1.20    && < 1.21,
+    Cabal                     >= 1.18    && < 1.21,
     safecopy                  >= 0.8     && < 0.9,
     acid-state                >= 0.12    && < 0.13,
     snaplet-acid-state        >= 0.2     && < 0.3,
