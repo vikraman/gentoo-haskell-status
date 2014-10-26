@@ -36,7 +36,7 @@ td, th {
   border-width: 0 0 0 0.1em;
 }
 
-.outdated-link {
+.static-link {
   position: fixed;
   right: 2em;
   bottom: 2em;

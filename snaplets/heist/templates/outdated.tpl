@@ -1,3 +1,4 @@
 <apply template="base">
-  <apply template="packages" />
+  <a href="/" class="static-link">Show all packages</a>
+  <apply template="packages"></apply>
 </apply>
