@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards   #-}
 
 module Site where
 
@@ -46,20 +45,23 @@ handleOutdatedpackages :: AppHandler ()
 handleOutdatedpackages = do
   hackage <- query QueryHackage
   packages <- query QueryPackages
-  renderWithSplices "outdated" (packageSplices
-                                hackage
-                                (filter (\p -> hackageVersion hackage p > packageVersion p) packages)
-                               )
+  renderWithSplices "outdated"
+                    (packageSplices hackage
+                                    (filter (\p -> hackageVersion hackage p > packageVersion p)
+                                            packages)
+                                    )
 
 handleUpdateHackage :: AppHandler ()
 handleUpdateHackage =
-  do a <- getAcidState
+  do createCheckpoint
+     a <- getAcidState
      liftIO . void . forkIO . void $ cabalUpdate >> readHackage >>= A.scheduleUpdate a . UpdateHackage
   where cabalUpdate = callCommand "cabal update"
 
 handleUpdatePackages :: AppHandler ()
 handleUpdatePackages =
-  do a <- getAcidState
+  do createCheckpoint
+     a <- getAcidState
      liftIO . void . forkIO . void $ readPackages >>= A.scheduleUpdate a . UpdatePackages
 
 routes :: [ (ByteString, AppHandler ()) ]
