@@ -8,6 +8,7 @@ import qualified Control.Exception       as E
 import           Control.Monad
 import qualified Data.Attoparsec.Text    as P
 import qualified Data.List               as L
+import qualified Data.Map.Strict         as M
 import qualified Data.Text               as T
 import           Data.Typeable
 import qualified Distribution.Hackage.DB as H
@@ -19,7 +20,7 @@ import           Network.HTTP.Conduit
 type Path = T.Text
 type Tree = [T.Text]
 
-type Hackage = H.Map String [V.Version]
+type Hackage = M.Map T.Text [V.Version]
 
 getTree :: IO Tree
 getTree = do eTree <- nestedTree "gentoo-haskell" "gentoo-haskell" "master"
@@ -83,13 +84,13 @@ data PackageStatus = Old | New | Unknown deriving (Show, Eq, Ord)
 
 hackageVersion :: Hackage -> Package -> V.Version
 hackageVersion hackage package =
-  case H.lookup (T.unpack . packageName $ package) hackage of
+  case M.lookup (packageName package) hackage of
     Just m ->  maximum m
     Nothing -> packageVersion package
 
 packageStatus :: Hackage -> Package -> PackageStatus
 packageStatus hackage package =
-  case H.lookup (T.unpack . packageName $ package) hackage of
+  case M.lookup (packageName package) hackage of
     Just m -> if L.any (packageVersion package <) m
                 then Old
                 else New
@@ -99,7 +100,7 @@ showVersion :: V.Version -> String
 showVersion (V.Version vs _) = L.foldl1 (\a b -> a ++ "." ++ b) $ show `fmap` vs
 
 buildHackage :: H.Hackage -> Hackage
-buildHackage = H.map H.keys
+buildHackage = M.mapKeys T.pack . H.map H.keys
 
 readHackage :: IO Hackage
 readHackage = buildHackage <$> H.readHackage
