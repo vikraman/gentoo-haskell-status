@@ -4,13 +4,14 @@
 module Main where
 
 import           Control.Concurrent
-import           Control.Exception   (SomeException, catch, try)
+import           Control.Exception   (SomeException, try)
 import qualified Data.Text           as T
 import           Site
 import           Snap.Core
 import           Snap.Http.Server
 import           Snap.Snaplet
 import           Snap.Snaplet.Config
+import           System.Directory
 import           System.IO
 
 #ifdef DEVELOPMENT
@@ -24,6 +25,9 @@ import Package
 
 main :: IO ()
 main = do
+    _ <- createDirectoryIfMissing False "log"
+    _ <- openFile "log/access.log" WriteMode >>= hClose
+    _ <- openFile "log/error.log" WriteMode >>= hClose
     (conf, site, cleanup) <- $(loadSnapTH [| getConf |]
                                           'getActions
                                           ["snaplets/heist/templates"])
