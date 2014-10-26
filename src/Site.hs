@@ -56,7 +56,7 @@ handleUpdateHackage =
   do createCheckpoint
      a <- getAcidState
      liftIO . void . forkIO . void $ cabalUpdate >> readHackage >>= A.scheduleUpdate a . UpdateHackage
-  where cabalUpdate = callCommand "cabal update"
+  where cabalUpdate = callCommand "cabal update -v0"
 
 handleUpdatePackages :: AppHandler ()
 handleUpdatePackages =
